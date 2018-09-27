@@ -1,0 +1,65 @@
+<?php if(is_array($this->records) && count($this->records) > 0) {
+    $pos    = array_unique(array_column($this->records, 'PO_Number'));
+    foreach($pos as $po){
+        $data = array_filter($this->records, function ($var) use ($po) { return ($var['PO_Number'] == $po); });
+        $i=0;
+        foreach($data as $record){  $i++;
+            if($i==1){?>
+                
+            <div style=" height: 100%; width: 100%">
+                <table  class='picking' style='margin: 0 auto; width:100%;' >
+                        <tr>
+                          <th colspan="2" class="table-header">PO Number</th>
+                          <th colspan="2" class="table-header"><?php echo $record['PO_Number']; ?></th>
+                        </tr>
+                        <tr>
+                          <th colspan="2" class="table-header">Supplier name</th>
+                          <th colspan="2" class="table-header"><?php echo $record['Vendor_Name']; ?></th>
+                        </tr>
+                        <tr>
+                          <th colspan="2" class="table-header">Supplier</th>
+                          <th colspan="2" class="table-header"><?php echo $record['Vendor']; ?></th>
+                        </tr>
+                        <tr>
+                          <th colspan="2" class="table-header">Buyer</th>
+                          <th colspan="2" class="table-header"><?php echo $record['Buyer']; ?></th>
+                        </tr>                
+                        <tr>
+                            <th class="table-header"></th>
+                            <th class="table-header">Item No.</th>
+                            <th class="table-header">Item Name</th>
+                            <th class="table-header">Received Qty</th>
+                            <th class="table-header">UNIT</th>
+                            <th class="table-header">Purchase Price/unit</th>
+                            <th class="table-header">Total Received Cost</th>
+                            <th class="table-header">Currency</th>
+                            <th class="table-header">LOT Number</th>
+                            <th class="table-header">Receipt Date</th>
+                            <th class="table-header">Receiving Number</th>
+                            <th class="table-header">Warehouse</th>
+                            <th class="table-header">Low Status</th>
+                            <th class="table-header">High Status</th>
+                        </tr>
+            <?php } ?>
+                <tr>
+                        <td class="table-line"></td>
+                        <td class="table-line"><?php echo $record['Item']; ?></td>
+                        <td class="table-line"><?php echo $record['Descr']; ?></td>
+                        <td class="table-line"><?php echo (float) $record['Reported_Qty']; ?></td>
+                        <td class="table-line"><?php echo $record['UOM']; ?></td>
+                        <td class="table-line"><?php echo (float) $record['PPrice']; ?></td>
+                        <td class="table-line"><?php echo (float) $record['Cost']; ?></td>
+                        <td class="table-line"><?php echo $record['Currency']; ?></td>
+                        <td class="table-line"><?php echo $record['LOT_Number']; ?></td>
+                        <td class="table-line"><?php echo date('m/d/Y', strtotime($record['RecDate'])); ?></td>
+                        <td class="table-line"><?php echo (float) $record['Receiving_Number']; ?></td>
+                        <td class="table-line"><?php echo $record['WHS']; ?></td>
+                        <td class="table-line"><?php echo $record['Low_Status']; ?></td>
+                        <td class="table-line"><?php echo $record['High_Status']; ?></td>
+                </tr>  
+
+            <?php }  ?>
+                </table>   
+            </div>      
+<?php } 
+} ?>

@@ -1,0 +1,19 @@
+<form action="" method="post">
+    <table id="form" style="margin:0 auto;">
+        <tr>
+            <td colspan='6' class="top-header"><?php echo $this->title; ?></td>
+        </tr>
+        <tr>
+            <td class="form-header">Barcode</td>
+            <td class="form-header">Order Number</td>
+            <td class="form-header"></td>
+        </tr>
+        <tr>
+            <td class="form-field"><input class="form-element" type="checkbox" name="barcode" id="barcode" ></td>
+            <td class="form-field"><input class="form-element" type="text" name="order_number" id="order_number" ></td>
+            <td class="form-field">
+                <input type="submit" name="submit" id="submit" value="Print">
+            </td>
+        </tr>
+    </table>
+</form>

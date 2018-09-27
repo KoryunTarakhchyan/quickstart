@@ -1,0 +1,60 @@
+<style>
+   table.user_table tr:nth-child(even) {background: #CCC}
+</style>
+<!-- BREAD CRUMB NAVIGATOR PANEL -->
+<div class="bread_crumb_module">
+    <div class="bread_crumb">
+        <ul>
+            <li><a href="/dashboard">Home</a></li>
+            <li><?php echo $this->title; ?></li>
+        </ul>
+    </div><!-- end bread_crumb div -->
+</div><!-- end bread_crumb_module div -->
+<div class="clear"></div>
+<!-- SYSTEM MESSAGES -->
+<?php if( is_array($this->messages) && count($this->messages) > 0 ) { ?>
+    <div id="messages">
+        <ul>
+            <?php foreach( $this->messages as $message ) { ?>
+                <li><?php echo $message; ?></li>
+            <?php } ?>
+        </ul>
+    </div><!-- end messages div -->
+<?php } ?>
+<div class="form_options">[ <a href="<?php echo $this->url(array('controller' => 'ticket','action'     => 'ticket'),'default',true) ?>">Add New Ticket</a> ]</div>
+<table  class='user_table' width="840">
+    <thead>               
+        <tr>
+          <th class="form-header">Name</th>
+          <th class="form-header">Subject</th>
+          <th class="form-header">Request Date</th>
+          <th class="form-header">Updated Date</th>
+          <th class="form-header">Created Date</th>
+          <th class="form-header">Created by</th>
+          <th class="form-header">Processed by</th>
+          <th class="form-header">Status</th>
+          <th class="form-header"></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->reocrds as $entry): ?>
+	   <tr>
+            <td><?php echo $entry['name']; ?></td>
+            <td><?php echo $entry['subject']; ?></td>
+            <td><?php echo date('m/d/Y H:i', strtotime($entry['requestedDate'])); ?></td>
+            <td><?php echo date('m/d/Y H:i', strtotime($entry['updatedDate'])); ?></td>
+            <td><?php echo date('m/d/Y H:i', strtotime($entry['createdDate'])); ?></td>
+            <td><?php echo $entry['userId']; ?></td>
+            <td><?php echo $entry['processedBy']; ?></td>
+            <td><?php echo $entry['status']; ?></td>
+            <td>
+                <?php if ($entry['status'] < 2) { ?>
+                        <a href="/ticket/ticket/id/<?php echo $entry['id']; ?>">
+                            <img title="edit the selected user's information" src="/images/icons/famfam/pencil.png" />
+                        </a>
+		<?php } ?>
+            </td> 
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+</table>  

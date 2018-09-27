@@ -1,0 +1,87 @@
+<div class="pdfrow" >Page <?php echo $this->page; ?> of <?php echo $this->allpages; ?></div>
+<?php if ($this->top ==0) { ?>
+    </table>
+    </div>  
+    <div class="cleard"></div>  
+<?php } ?>
+<div class="pdfrow" >
+    <div class="pdfcolumn">
+        <span class="bold"> Jarrow Formulas Inc </span>
+        1824 S. Robertson Blvd
+        Los Angeles CA 90035
+        USA
+        310-204-6936
+        310-204-5261
+    </div>
+    <div class="pdfcolumnwide bold">Packing Slip</div>
+    <div class="pdfcolumn center"> 
+        <span class="bold">Date</span> <br>
+        <?php echo date('m/d/y'); ?> 
+        <div class="cleard"></div>
+        <img style="display: block;margin-left: auto;margin-right: auto;" src="<?php echo  '\..\..\pdf\barcode_'.$this->orderNumber.'.png'; ?> "/>
+        <span><?php echo $this->orderNumber; ?> </span>
+    </div>
+</div>
+<div class="cleard"></div>        
+<?php $header = $this->picklist[$this->orderNumber]['header'][0]; ?>  
+<?php if ($this->top ==1) { ?>
+    <div class="pdfrow" style="text-align:center;">
+        <div class="boxl">
+            Sold to:
+        </div>                 
+        <div class="boxr">  
+            Ship to:
+        </div>
+    </div>            
+    <div class="pdfrow" style="text-align:center;">
+        <div class="box boxl">
+            <p>
+                <?php echo $header['custname']; ?><br>
+                <?php echo $header['sold_Shipto_Addr1']; ?><br>
+                <?php echo $header['sold_Shipto_Addr2']; ?>
+            </p>
+            <p>
+                <?php echo $header['sold_Shipto_Addr3']; ?><br>
+                <?php echo $header['sold_Country']; ?>
+            </p>
+        </div> 
+        <div class="box boxr"> 
+            <p>
+                <?php echo $header['soldname']; ?><br>
+                <?php echo $header['Shipto_Addr1']; ?><br>
+                <?php echo $header['Shipto_Addr2']; ?>
+            </p>
+            <p>
+                <?php echo $header['Shipto_Addr3']; ?><br>
+                <?php echo $header['Country']; ?>
+            </p>
+        </div>
+    </div>      
+<?php } ?>
+<div class="cleard"></div>
+<table  class='picking' >
+    <tr >
+        <th class="table-header">Customer No. <br>  <?php echo $header['custkey']; ?> </th>
+        <th class="table-header">PO Number <br>  <?php echo $header['po_number']; ?> </th>
+        <th class="table-header">Terms <br><?php echo $header['Terms']; ?></th>
+        <th class="table-header">CSA <br><?php echo $header['CSA']; ?></th>
+        <th class="table-header">Ship Via <br> <?php echo $header['Ship_Via']; ?></th>
+        <th class="table-header">Ship Date <br> <?php echo $header['ord_date']; ?></th>
+    </tr>
+
+</table> 
+<div class="pdfrow" >
+    <span class="bold">Category  </span><?php echo $header['category']; ?>
+</div> 
+<div class="cleard"></div>
+<?php if ($this->top ==0) { ?>
+    <table  class='picking' >                        
+        <tr>
+            <th class="table-header cols">Qty. Shipped   </th>
+            <th class="table-header colm">Item Number</th>
+            <th class="table-header coll">Description</th>
+            <th class="table-header colm">Item UPC</th>
+            <th class="table-header cols">Qty. Ordered</th>
+            <th class="table-header cols">Weight</th>
+        </tr>
+<?php } ?>    

@@ -1,0 +1,215 @@
+<form action="<?php echo $this->url(array('controller' => 'ticket', 'action' => 'releasedorders'), 'default', true) ?>" method="post">
+<table class="portal_table" id="scan_table">
+    <tr>
+        <td colspan='6' class="top-header">Filter Orders</td>
+    </tr>
+    <tr>
+        <td class="form-header">Customer Number</td>
+        <td class="form-header">Ship Via</td>
+        <td class="form-header">Order Category</td>
+        <td class="form-header">Order Date</td>
+        <td class="form-header">Probiotics</td>
+        <td class="form-header"></td>
+    </tr>
+    <tr>
+        <td class="form-field"><input class="form-element" type="text" name="customer_number" id="customer_number" value=""></td>
+        <td class="form-field"><input class="form-element" type="text" name="Ship_Via" id="Ship_Via" value=""></td>
+        <td class="form-field"><input class="form-element" type="text" name="Order_Category" id="Order_Category" value=""></td>
+        <td class="form-field"><input class="form-element" type="text" name="Order_date" id="Order_date" value=""></td>
+        <td class="form-field">
+            <select  class="form-element" name="Has_Probo" id="Has_Probo" style="width: 100%;">
+                <option value="">...</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </td>
+        <td class="form-field">
+            <input type="submit" name="submit" id="submit" value="Search">
+        </td>
+    </tr>
+</table>
+</form>
+<table class="portal_table"style="margin-top: 10px;">
+    <thead>
+        <tr>
+            <td colspan='20' style="text-align: center;"class="top-header">Released Orders</td>
+        </tr>
+        <tr>
+            <?php echo $this->pagination; ?>
+        </tr>
+        <tr>
+            <td colspan='20'  style="cursor:pointer;" class="printAll">Print All</td>
+        </tr>
+        <tr>
+            <th class="form-header">#</th>
+            <th class="form-header">Barcode</th>
+            <th class="form-header">Picklist</th>
+            <th class="form-header">Order no</th>
+            <th class="form-header">Customer Number</th>
+            <th class="form-header">Customer Name</th>
+            <th class="form-header">Payment terms</th>
+            <th class="form-header">Ship Via</th>
+            <th class="form-header">Order Category</th>
+            <th class="form-header">No Items</th>
+            <th class="form-header">Total Qty</th> 
+            <th class="form-header">Has Probo</th>
+            <th class="form-header">Order Date</th>
+            <th class="form-header">State</th>
+            <th class="form-header">Zipcode</th>
+            <th class="form-header">CSA</th>
+            <!--<th class="form-header">Notes</th>-->
+            <th class="form-header">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $i = 1;
+        foreach ($this->entries as $entry){
+            $c1 = '';
+            $c2 = '';
+
+            if ($entry['Order_Category'] != $entry['Customer_Cat']) {
+                $c1 = 'red';
+            }
+            if ($entry['Ship_Via'] != $entry['Customer_Ship']) {
+                $c2 = 'red';
+            }
+
+            if ($entry['Has_Probo'] == 1) {
+                $prob = 'Yes';
+            } else {
+                $prob = 'No';
+            }
+            ?>
+            <tr id="<?php echo $entry['Order_no']; ?>">
+                <td class="form-field"><?php echo $i; ?></td>
+                <td class="form-field"><input type="checkbox" class="printCheckBarcode" data-orderNumber="<?php echo $entry['Order_no']; ?>"></td>
+                <td class="form-field"><input type="checkbox" class="printCheckPicklist" data-orderNumber="<?php echo $entry['Order_no']; ?>"></td>
+                <td class="form-field"><?php echo $entry['Order_no']; ?></td>
+                <td class="form-field"><?php echo $entry['customer_number']; ?></td>
+                <td class="form-field"><?php echo $entry['customer_name']; ?></td>
+                <td class="form-field"><?php echo $entry['Payment_terms']; ?></td>
+                <td class="form-field <?php echo $c2; ?>"><?php echo $entry['Ship_Via']; ?></td>
+                <td class="form-field <?php echo $c1; ?>"><?php echo $entry['Order_Category']; ?></td>
+                <td class="form-field"><?php echo $entry['No_Items']; ?></td>
+                <td class="form-field"><?php echo $entry['Total_Qty']; ?></td>
+                <td class="form-field"><?php echo $prob; ?></td>
+                <td class="form-field"><?php echo $entry['Order_date']; ?></td>
+                <td class="form-field"><?php echo $entry['State']; ?></td>
+                <td class="form-field"><?php echo $entry['Zip']; ?></td>
+                <td class="form-field"><?php echo $entry['CSA']; ?></td>
+<!--                <td class="form-field <?php if ($entry['Notes'] != '') echo 'notes';?>">
+                    <?php if ($entry['Notes'] != '') { ?>
+                        Show Notes
+                        <span class="tooltiptext"><?php echo $entry['Notes']; ?></span>
+                    <?php } ?>
+                </td>                        -->
+                <td class="form-field">
+                    <a target="_blank" >
+                        <img src="\images\icons\famfam\printer.png" style="cursor:pointer;" class="pointer printOne" data-orderNumber="<?php echo $entry['Order_no']; ?>"/>
+                    </a> 
+                    <img src="\images\icons\famfam\arrow_right.png" style="cursor:pointer;" data-orderNumber="<?php echo $entry['Order_no']; ?>" class="pointer proceed"/>
+                </td>			
+            </tr>
+    <?php $i++;
+        } ?>
+    </tbody>
+</table>
+
+
+<script type="text/javascript">
+    $(".proceed").click(function(){
+        var orderNumber =  $(this).attr("data-orderNumber");
+        var url = '<?php
+                    echo $this->url(
+                            array(
+                        'controller' => 'ticket',
+                        'action' => 'proceed',
+                            ), 'default', true)
+                    ?>';
+       
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {'orderNumber': orderNumber},
+            dataType: "text",
+            success: function(resultData) { 
+                if (resultData == 1) 
+                {
+                    $('#'+orderNumber).remove()
+                }
+            }
+        });
+    });
+                       
+    $(".printAll").click(function(){
+        var onBarcode = [];
+        var onPicklist = [];
+        $('.printCheckBarcode:checkbox:checked').each(function () {
+            onBarcode.push($(this).attr("data-orderNumber"));
+        });
+        $('.printCheckPicklist:checkbox:checked').each(function () {
+            onPicklist.push($(this).attr("data-orderNumber"));
+        });
+        if (onBarcode.length === 0 && onPicklist.length === 0) {
+            return;
+        }
+        var url = '<?php
+                    echo $this->url(
+                            array(
+                        'controller' => 'ticket',
+                        'action' => 'printorder',
+                            ), 'default', true)
+                    ?>';
+         $.ajax({
+            type: "POST",
+            url: url,
+            data: {'onPicklist': onPicklist,'onBarcode': onBarcode,'print':0},
+            dataType: "text",
+            success: function(resultData) { 
+                     window.open('\\pdf\\orderNumbers.pdf', '_blank');
+            }
+        });
+    });
+    
+    $(".printOne").click(function(){        
+        var orderNumber = $(this).attr("data-orderNumber");
+        var onBarcode = [];
+        var onPicklist = [];
+        
+        $('.printCheckBarcode:checkbox:checked').each(function () {
+            if ($(this).attr("data-orderNumber") == orderNumber) {
+                onBarcode.push($(this).attr("data-orderNumber"));
+            }
+        });
+        
+        $('.printCheckPicklist:checkbox:checked').each(function () {
+            if ($(this).attr("data-orderNumber") == orderNumber) {    
+                onPicklist.push($(this).attr("data-orderNumber"));
+            }
+        });
+        if (onBarcode.length === 0 && onPicklist.length === 0) {
+            return;
+        }
+        var url = '<?php
+                    echo $this->url(
+                            array(
+                        'controller' => 'ticket',
+                        'action' => 'printorder',
+                            ), 'default', true)
+                    ?>';
+         $.ajax({
+            type: "POST",
+            url: url,
+            data: {'onPicklist': onPicklist,'onBarcode': onBarcode,'print':0},
+            dataType: "text",
+            success: function(resultData) { 
+                     window.open('\\pdf\\orderNumbers.pdf', '_blank');
+            }
+        });
+    });
+    
+    $( function() {
+        $( "#Order_date" ).datepicker();
+    } );
+</script> 

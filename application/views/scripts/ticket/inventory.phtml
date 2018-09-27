@@ -1,0 +1,82 @@
+<!-- BREAD CRUMB NAVIGATOR PANEL -->
+<div class="bread_crumb_module">
+    <div class="bread_crumb">	
+        <ul>
+            <li><a href="/dashboard">Home</a></li>
+            <li><?php echo $this->title; ?></li>
+        </ul>
+    </div><!-- end bread_crumb div -->
+</div><!-- end bread_crumb_module div -->
+<div class="clear"></div>
+<div class="form_options">[ 
+    <a href="<?php echo $this->url(array('controller' => 'ticket', 'action' => 'tickets'), 'default', true) ?>">Tickets</a> ]
+</div>
+
+<!-- SYSTEM MESSAGES -->
+<?php if (is_array($this->messages) && count($this->messages) > 0) { ?>
+    <div id="messages">
+        <ul>
+            <?php foreach ($this->messages as $message) { ?>
+                <li><?php echo $message; ?></li>
+            <?php } ?>
+        </ul>
+    </div><!-- end messages div -->
+<?php } ?>    <form action="<?php echo $this->url() ?>" method="post">
+    <?php echo $this->form->id ?>
+    <?php //echo $this->form->csrf ?>
+    <table id="form">
+        <thead>
+            <tr>
+                <td colspan=2 class="top-header">Inventory Items Manager</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="form-header">Name</td>
+                <td class="form-field"><?php echo $this->form->name; ?></td>
+            </tr>
+            <tr>
+                <td class="form-header">Computer Model</td>
+                <td class="form-field"><?php echo $this->form->model; ?></td>
+            </tr>
+            <tr>
+                <td class="form-header">CPU/Core</td>
+                <td class="form-field"><?php echo $this->form->core; ?></td>
+            </tr>
+            <tr>
+                <td class="form-header">Memory</td>
+                <td class="form-field"><?php echo $this->form->memory; ?></td>
+            </tr>
+            <tr>
+                <td class="form-header">Operating System</td>
+                <td class="form-field"><?php echo $this->form->os; ?></td>
+            </tr>
+            <tr>
+                <td class="form-header">Service Tag</td>
+                <td class="form-field"><?php echo $this->form->tag; ?></td>
+            </tr>
+            <tr>
+                <td class="form-header">Location</td>
+                <td class="form-field"><?php echo $this->form->location; ?></td>
+            </tr>
+            <tr>
+                <td class="form-header">Support/Maint. Date</td>
+                <td class="form-field"><?php echo $this->form->support_date; ?></td>
+            </tr>
+            <tr>
+                <td class="form-header">Type</td>
+                <td class="form-field"><?php echo $this->form->type; ?></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="form-field"><?php echo $this->form->submit; ?></td>
+            </tr>			    
+        </tbody>
+    </table>
+
+</form>
+
+<script>
+  $( function() {
+    $( "#support_date" ).datepicker();
+  } );
+</script>

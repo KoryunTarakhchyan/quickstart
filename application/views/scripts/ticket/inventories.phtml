@@ -1,0 +1,62 @@
+<style>
+   table.user_table tr:nth-child(even) {background: #CCC}
+</style>
+<!-- BREAD CRUMB NAVIGATOR PANEL -->
+<div class="bread_crumb_module">
+    <div class="bread_crumb">
+        <ul>
+            <li><a href="/dashboard">Home</a></li>
+            <li><?php echo $this->title; ?></li>
+        </ul>
+    </div><!-- end bread_crumb div -->
+</div><!-- end bread_crumb_module div -->
+<div class="clear"></div>
+<!-- SYSTEM MESSAGES -->
+<?php if( is_array($this->messages) && count($this->messages) > 0 ) { ?>
+    <div id="messages">
+        <ul>
+            <?php foreach( $this->messages as $message ) { ?>
+                <li><?php echo $message; ?></li>
+            <?php } ?>
+        </ul>
+    </div><!-- end messages div -->
+<?php } ;
+    $location =  array('0' => 'Robertson','1' => 'Shoemaker');
+    $type =  array('0' => 'Desktop','1' => 'Laptop','2' => 'Server');
+?> 
+<div class="form_options">[ <a href="<?php echo $this->url(array('controller' => 'ticket','action'=> 'inventory'),'default',true) ?>">Add New Item</a> ]</div>
+<table  class='user_table' width="1200" >
+    <thead>               
+        <tr>
+          <th class="table-header">Name</th>
+          <th class="table-header">Computer Model</th>
+          <th class="table-header">CPU/Core</th>
+          <th class="table-header">Memory</th>
+          <th class="table-header">Operating System</th>
+          <th class="table-header">Service Tag</th>
+          <th class="table-header">Location</th>
+          <th class="table-header">Support/Maint. Date</th>
+          <th class="table-header">Type</th>
+          <th class="table-header"></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->entries as $entry): ?>
+        <tr>
+            <td ><?php echo $entry['name']; ?></td>
+            <td ><?php echo $entry['core']; ?></td>
+            <td ><?php echo $entry['memory']; ?></td>
+            <td ><?php echo $entry['os']; ?></td>
+            <td ><?php echo $entry['tag']; ?></td>
+            <td ><?php echo $location[$entry['location']]; ?></td>
+            <td ><?php echo date('m/d/Y H:i', strtotime($entry['support_date'])); ?></td>
+            <td ><?php echo $type[$entry['type']]; ?></td>
+            <td >
+                <a href="/ticket/inventory/id/<?php echo $entry['id']; ?>">
+                    <img title="edit the selected user's information" src="/images/icons/famfam/pencil.png" />
+                </a>
+            </td> 
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>  

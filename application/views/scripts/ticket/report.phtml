@@ -1,0 +1,121 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#start_date,#end_date").datepicker(); 
+    });
+</script>
+<form action="" method="post">
+    <table id="form" style="margin:0 auto;">
+        <tr>
+            <td colspan=2 class="top-header">Monthly Sales</td>
+        </tr>
+        <tr>
+            <td class="form-element">Report Type</td>
+            <td class="form-element">
+                <select name="report_type" id="report_type">
+                    <option <?php if($this->entries['report_type'] == 'product_group') echo 'selected="selected"';?> value="product_group">Product Group</option>
+                    <option <?php if($this->entries['report_type'] == 'sales_person') echo 'selected="selected"';?> value="sales_person">Sales Person</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="form-element">Start date</td>
+            <td class="form-element"><input type="text" name="start_date" value="<?php echo $this->entries['start_date']; ?>" id="start_date" required="required"/></td>
+        </tr>
+        <tr>
+            <td class="form-element">End Date</td>
+            <td class="form-element"><input type="text" name="end_date" value="<?php echo $this->entries['end_date']; ?>" id="end_date" required="required"/></td>
+
+        </tr>
+<!--                <tr>
+            <td class="form-element">Export to Excel</td>
+            <td class="form-element"><input type="checkbox" name="export"/></td>
+        </tr>-->
+        <tr>
+            <td colspan='2' class="form-element" style="text-align: center;">
+                <input type="submit" name="submit" id="submit" value="Search">
+            </td>
+        </tr>
+    </table>
+</form>
+
+<?php if(is_array($this->records) && count($this->records) > 0) {
+    if ($this->entries['report_type'] == 'sales_person') { ?> 
+        <table class='picking' style='margin: 0 auto; width:800px;'>
+            <thead>
+                <tr>
+                    <td colspan="6" class="top-header"><?php echo strtoupper(str_replace('_', ' ', $this->entries['report_type'])); ?> Sales</td>
+                </tr>
+                <tr>
+                    <td class="table-header">Sales Person</td>
+                    <td class="table-header">Invoice Total</td>
+                    <td class="table-header">Net Invoice</td>
+                </tr>
+            </thead>
+            <tbody style="display:table-footer-group">
+        <?php $i = 1;
+        foreach ($this->records as $entry) { ?>
+                    <tr id="<?php echo $entry['Order_no']; ?>">
+                        <td class="table-line"><?php echo $entry['Sales_Person']; ?></td>
+                        <td class="table-line"><?php echo $entry['Invoice_Total']; ?></td>
+                        <td class="table-line"><?php echo $entry['Net_Invoice']; ?></td>
+                    </tr>
+            <?php $i++;
+        } ?>
+            </tbody>
+        </table>
+    <?php } else if ($this->entries['report_type'] == 'product_group') { ?>
+        <table class='picking' style='margin: 0 auto; width:800px;'>
+            <thead>
+                <tr>
+                    <td colspan="6" class="top-header"><?php echo strtoupper(str_replace('_', ' ', $this->entries['report_type'])); ?> Sales</td>
+                </tr>
+                <tr>
+                    <th class="table-header">Product Group</th>
+                    <th class="table-header">Item No </th>
+                    <th class="table-header">Description </th>
+                    <th class="table-header">Units </th>
+                    <th class="table-header">Sales </th>
+                </tr>
+            </thead>
+            <tbody style="display:table-footer-group">
+                <?php
+                $grand_sales = 0;
+                $grand_unit = 0;
+                $groups = array_unique(array_column($this->records, 'Product_Group'));
+                foreach ($groups as $group) {
+                    $data = array_filter($this->records, function ($var) use ($group) { return ($var['Product_Group'] == $group); });
+                    $sales = array_sum(array_map(function($data) { return $data['Sales']; }, $data));
+                    $units = array_sum(array_map(function($data) { return $data['Units']; }, $data));
+                    foreach ($data as $entry) {?>
+                        <tr>
+                            <td class="table-line"><?php echo $entry['Product_Group']; ?></td>
+                            <td class="table-line"><?php echo $entry['Item_No']; ?></td>
+                            <td class="table-line"><?php echo $entry['Description']; ?></td>
+                            <td class="table-line"><?php echo (float) $entry['Units']; ?></td>
+                            <td class="table-line"><?php echo $entry['Sales']; ?></td>
+                        </tr>
+                    <?php } ?>
+                    <tr class="total">
+                        <td class="table-line"><b>TOTAL</b></td>
+                        <td class="table-line"></td>
+                        <td class="table-line"></td>
+                        <td class="table-line"><b><?php echo $units; ?></b></td>
+                        <td class="table-line"><b><?php echo $sales; ?></b></td>
+                    </tr>
+            <?php
+            $grand_sales = $grand_sales + $sales;
+            $grand_unit = $grand_unit + $units;
+                }
+            ?>
+                <tr class="total">
+                    <td class="table-line regbold"><b>TOTALS</b></td>
+                    <td class="table-line"></td>
+                    <td class="table-line"></td>
+                    <td class="table-line regbold"><b><?php echo $grand_unit; ?></b></td>
+                    <td class="table-line regbold"><b><?php echo $grand_sales; ?></b></td>
+                </tr>
+            </tbody>
+        </table>
+    <?php }
+}
+?>

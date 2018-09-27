@@ -1,0 +1,289 @@
+.Row
+{
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-spacing: 2px;
+}
+.Column
+{
+    display: table-cell;
+}
+.ColumnDetail 
+{
+        width: 310px;
+}
+.Head 
+{
+	    background-color: #00ff66;
+}
+
+.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+}
+
+.menu li {
+    float: left;
+}
+
+.menu li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.menu li a:hover {
+    background-color: #111111;
+}
+
+.gridtable {
+	display: table;
+	height: 100px;
+	width: 100%;
+	table-layout: fixed;
+}
+
+.gridtable .regbold {
+    font-weight: bold;
+}
+
+.gridtable .total {
+    background: #cacaca;
+}
+
+
+.gridtable .reg {
+	display: table-cell;
+	height: 100%;
+	padding: 7px;
+	width: 7%;
+	border: 1px solid #000;
+}
+.gridtable .regs {
+	display: table-cell;
+	height: 100%;
+	padding: 7px;
+	width: 4%;
+	border: 1px solid #000;
+}
+
+.gridtable .first {	
+	display: table-cell;
+	height: 100%;
+	padding: 6px;
+	width: 3%;
+	border: 1px solid #000;
+}
+
+.red {
+	color: red;
+}
+
+.actions {
+    padding: 0px 16px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+body,td,th {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	color: #333;
+}
+.contents{
+	margin: 20px;
+	padding: 20px;
+	list-style: none;
+	background: #F9F9F9;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+.contents li{
+    margin-bottom: 10px;
+}
+
+
+
+
+
+
+.notes {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.notes .tooltiptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -150px;
+    
+    /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.notes:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+.notes .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+} 
+
+
+
+
+
+.bold {
+    font-weight: bold;
+}
+
+.cleard {
+    height:15px; 
+    width:100%; 
+    clear:both;
+}
+
+
+.pdf {
+    height:80%; 
+    width:100%; 
+    padding-top: 30px;
+    /*padding-bottom: 100px;*/
+    position: relative;
+}
+
+.pdfrow {
+    width:95%; 
+    padding-left: 35px;
+}
+
+.pdfcolumn {
+    float: left;
+    width: 25%;
+}
+
+ .center {
+    text-align: center;
+}
+
+.span_right {
+    padding: 30px
+}
+.pdfcolumnwide {
+    float: left;
+    width: 45%;
+    text-align: center;
+}
+.pdfrow:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.box {
+    height: 100px;
+    padding: 0 5px 0 5px;
+    border: 1px solid black;
+    text-align: left;
+    font-size: 12px;
+}
+
+.boxl {
+    float: left;
+    width: 40%;
+    text-align: left;
+}
+
+.boxr {
+    float: right;
+    margin-right: 30px;
+    width: 40%;
+    text-align: left;
+}
+
+.pdf .picking, .pdf .picking th, .pdf .picking td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px 2px;
+    font-size: 12px;
+}
+
+.pdf .cols {
+   width: 8%;
+   text-align: center;
+}
+
+.pdf .colm {
+   width: 15%;
+   text-align: center;
+}
+
+.pdf .coll {
+   width: 40%;
+   /*text-align: center;*/
+}
+
+.pdf .picking {
+    margin: 0 auto; 
+    width:90%;
+}
+
+.bottom {
+    height:100px; 
+    position:absolute; 
+    bottom:0px;
+}
+
+.noborder{
+    border:0px;
+}
+
+ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination li {display: inline;}
+
+ul.pagination li {
+    float: left;
+    padding: 8px 16px;
+}
+
+ul.pagination li a{
+    color: black;
+    text-decoration: none;
+}
+
+ul.pagination li.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+ul.pagination li:hover:not(.active) {background-color: #ddd;}
