@@ -271,85 +271,89 @@ class TicketController extends Zend_Controller_Action
         
     public function shipmentAction()
     {
-        $this->view->title = "Shipment";
-//        ini_set('max_execution_time', 300);
-//        $mapper     =   new Atlas_Model_ShipstationMapper(); 
-//        $firstresults    =   $mapper->PullData('shipments',
-//                                array(  'startDate' =>  '2018-09-26',
-//                                        'endDate'   =>  '2018-09-26',
-//                                        'includeShipmentItems'  =>"true",
-//                                        'page'=>1,
-//                                        'sortBy'=>"CreateDate",
-//                                        'sortDir'=>"ASC",
-//                                        'pageSize'=>500
-//                                    ));
-//        $pages =  $firstresults['pages'];
-//       
-//        $data = array();
-//        $i = 1;    
-//        while ($i <= $pages) {
-//            $mapper     =   new Atlas_Model_ShipstationMapper(); 
-//            $results    =   $mapper->PullData('shipments',
-//                                array(  'startDate' =>  '2018-09-26',
-//                                        'endDate'   =>  '2018-09-26',
-//                                        'includeShipmentItems'  =>"true",
-//                                        'page'=>$i,
-//                                        'sortBy'=>"CreateDate",
-//                                        'sortDir'=>"ASC",
-//                                        'pageSize'=>500
-//                                    ));
-//
-//            foreach($results['shipments'] as $result){
-//                if ($result['batchNumber'] != NULL && $result['batchNumber'] != "") {                    
-//                    $headermapper = new Atlas_Model_ShipmentsheaderMapper();
-//                    $itemmapper = new Atlas_Model_ShipmentitemsMapper();
-//                    
-//
-//                    $data['header'][$i] = $result;
-//                    $data['header'][$i]['createDate'] = date('Ymd', strtotime($result['createDate']));
-//                    $data['header'][$i]['shipDate'] = date('Ymd', strtotime($result['shipDate']));
-//                    $data['header'][$i]['voidDate'] = date('Ymd', strtotime($result['voidDate']));
-//                    $data['header'][$i]['shipTo_name'] = $result['shipTo']['name'];
-//                    $data['header'][$i]['shipTo_company'] = $result['shipTo']['company'];
-//                    $data['header'][$i]['shipTo_street2'] = $result['shipTo']['street2'];
-//                    $data['header'][$i]['shipTo_street3'] = $result['shipTo']['street3'];
-//                    $data['header'][$i]['shipTo_city'] = $result['shipTo']['city'];
-//                    $data['header'][$i]['shipTo_state'] = $result['shipTo']['state'];
-//                    $data['header'][$i]['shipTo_postalCode'] = $result['shipTo']['postalCode'];
-//                    $data['header'][$i]['shipTo_postalCode'] = $result['shipTo']['country'];
-//                    $data['header'][$i]['shipTo_phone'] = $result['shipTo']['phone'];
-//                    $data['header'][$i]['shipTo_residential'] = $result['shipTo']['residential'];
-//                    $data['header'][$i]['shipTo_addressVerified'] = $result['shipTo']['addressVerified'];
-//                    $data['header'][$i]['weight_value'] = $result['weight']['value'];
-//                    $data['header'][$i]['weight_units'] = $result['weight']['units'];
-//                    $data['header'][$i]['weightUnits'] = $result['weight']['WeightUnits'];
-//                    $data['header'][$i]['storeId'] = $result['advancedOptions']['storeId'];
-
-//                    $header = New Atlas_Model_Shipmentsheader($result);
-//                    $headermapper->save($header);
-                    
-//                    foreach ($result['shipmentItems'] as $shipmentItems) { 
-//                        $data['items'][$i] =$shipmentItems;
-//                        $data['items'][$i]['orderId'] =$result['orderId'];
-//                        $data['items'][$i]['itemoptions'] =$shipmentItems['options'];
-//
-//                        $pieces = explode("-", $shipmentItems['sku']);
-//                        $data['items'][$i]['sku'] = trim($pieces[0]);
-//                        if ((int) $pieces[1]>0){
-//                            $data['items'][$i]['skuqty'] = $pieces[1];
-//                        } else {
-//                            $data['items'][$i]['skuqty'] = 1;
-//                        }
-////                        $item = new Atlas_Model_Shipmentitems($shipmentItems);
-////                        $itemmapper->save($item);
-//                    } 
-//                }        
+        $this->view->title = "Import Ship Station Data";
+        $request = $this->getRequest();
+//        if ($request->isPost()) {
+//            ini_set('max_execution_time', 60 * 60 * 4);
+//            $form_data      =   $request->getPost();
+//            $start_date     =   date('Y-m-d', strtotime($form_data['start_date']));
+//            $end_date       =   date('Y-m-d', strtotime($form_data['end_date']));
+//            $page           =   1;
+//            $results        =   array();
+//            $mapper = new Atlas_Model_ShipstationMapper();
+//            $values = array(    'shipDateStart'     => $start_date,
+//                                'shipDateEnd'       => $end_date,
+//                                'includeShipmentItems' => "true",
+//                                'page'      => $page,
+//                                'sortBy'    => "CreateDate",
+//                                'sortDir'   => "ASC",
+//                                'pageSize'  => 500   );
+//            $results[]      =   $mapper->PullData('shipments', $values);
+//            $total_pages    =   $results[0]['pages'];
+//            
+//            if ( (int) $total_pages > 0) {
+//                for($i=2; $i<=$total_pages; $i++){
+//                    $values['page'] =   $i;
+//                    $mapper         =   new Atlas_Model_ShipstationMapper();
+//                    $results[]      =   $mapper->PullData('shipments', $values);
+//                }
+//                
 //            }
-//            $i++;
-//        }                        
-//        print_r('<pre>');
-//        print_r($data);
-//        die();
+//            
+//            
+//            $data = array();
+//            $y = 1;
+//            foreach($results as $result){
+//                foreach ($result['shipments'] as $data) {                   
+//                    if ($data['batchNumber'] != NULL && $data['batchNumber'] != "") { 
+//                        foreach ($data['shipmentItems'] as $shipmentItems) { 
+//                   
+//                            $shipmentItems['orderId']       = $data['orderId'];
+//                            $shipmentItems['itemoptions']   = $shipmentItems['options'];
+//                            unset($shipmentItems['options']);
+//                            $pieces = explode("-", $shipmentItems['sku']);
+//                            $shipmentItems['sku'] = trim($pieces[0]);
+//                            if ( (int) $pieces[1]>0){
+//                                $shipmentItems['skuqty'] = $pieces[1];
+//                            } else {
+//                                $shipmentItems['skuqty'] = 1;
+//                            }
+//                            $itemmapper = new Atlas_Model_ShipmentitemsMapper();
+//                            $item = new Atlas_Model_Shipmentitems($shipmentItems);
+//                            $itemmapper->save($item);
+//    
+//                        }   
+//                        
+//                        
+//                        $data['createDate']               = date('Ymd', strtotime($data['createDate']));
+//                        $data['shipDate']                 = date('Ymd', strtotime($data['shipDate']));
+//                        $data['voidDate']                 = date('Ymd', strtotime($data['voidDate']));
+//                        $data['shipTo_name']              = $data['shipTo']['name'];
+//                        $data['shipTo_company']           = $data['shipTo']['company'];
+//                        $data['shipTo_street1']           = $data['shipTo']['street1'];
+//                        $data['shipTo_street2']           = $data['shipTo']['street2'];
+//                        $data['shipTo_street3']           = $data['shipTo']['street3'];
+//                        $data['shipTo_city']              = $data['shipTo']['city'];
+//                        $data['shipTo_state']             = $data['shipTo']['state'];
+//                        $data['shipTo_postalCode']        = $data['shipTo']['postalCode'];
+//                        $data['shipTo_country']           = $data['shipTo']['country'];
+//                        $data['shipTo_phone']             = $data['shipTo']['phone'];
+//                        $data['shipTo_residential']       = $data['shipTo']['residential'];
+//                        $data['shipTo_addressVerified']   = $data['shipTo']['addressVerified'];
+//                        $data['weight_value']             = $data['weight']['value'];
+//                        $data['weight_units']             = $data['weight']['units'];
+//                        $data['weightUnits']              = $data['weight']['WeightUnits'];
+//                        $data['storeId']                  = $data['advancedOptions']['storeId'];
+//
+//                        $headermapper = new Atlas_Model_ShipmentsheaderMapper();
+//                        $header = New Atlas_Model_Shipmentsheader($data);
+//                        $headermapper->save($header);
+//                        
+//                    }
+//                }
+//
+//            }
+//        }
         
         $request = $this->getRequest();
         if ($request->isPost()) {
