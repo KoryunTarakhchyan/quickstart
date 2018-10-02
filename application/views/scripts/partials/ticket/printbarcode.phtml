@@ -1,0 +1,33 @@
+<?php $barcodeHeader = $this->header;
+    $sumweight =0;
+    $sumitem =0;    
+?>
+        
+    <div class="pdf" style="height: 100%; margin-top: 120px; text-align: center" >
+        <table  class='picking' >
+            <tr >
+                <th class="table-header">Customer No. <br>  <?php echo $barcodeHeader['custkey']; ?> </th>
+                <th class="table-header">PO Number <br>  <?php echo $barcodeHeader['po_number']; ?> </th>
+                <th class="table-header">Terms <br><?php echo $barcodeHeader['Terms']; ?></th>
+                <th class="table-header">CSA <br><?php echo $barcodeHeader['CSA']; ?></th>
+                <th class="table-header">Ship Via <br> <?php echo $barcodeHeader['Ship_Via']; ?></th>
+                <th class="table-header">Ship Date <br> <?php echo $barcodeHeader['ord_date']; ?></th>
+            </tr>
+        </table> 
+        <div class="cleard"></div>
+        <img style="padding: 25px 0; margin-top: 200px" src="<?php echo '\..\..\pdf\barcode_'.$this->orderNumber.'.png' ?> "/><br>
+        <span><?php echo $this->orderNumber; ?> </span>
+
+    </div>
+    <?php foreach($this->list as $pick) { 
+                $sumweight = $sumweight + $pick['weight']*$pick['QtyIssued'];
+                $sumitem = $sumitem + $pick['QtyIssued'];
+    }?> 
+    <div class="pdfrow bottom"  >
+        <table>
+            <tr>
+                <td >Total weight : <?php echo $sumweight; ?></td>
+                <td>Total Items :  <?php echo $sumitem; ?></td>
+            </tr>
+        </table>
+    </div>

@@ -10,11 +10,13 @@
     $sumweight =0;
     $sumitem =0;
     ?>
-    <?php if (in_array($orderNumber,$this->barcodes)){ ?>
-        <div class="pdf" style="height: 100%; margin-top: 120px; text-align: center" >
-            <img style="padding: 25px 0; margin-top: 200px" src="<?php echo 'pdf\barcode_'.$orderNumber.'.png' ?> "/><br>
-            <span><?php echo $orderNumber; ?> </span>
-        </div>
+    <?php if (in_array($orderNumber,$this->barcodes)){ 
+         echo $this->partial('\partials\ticket\printbarcode.phtml', array(
+                    "orderNumber" => $orderNumber, 
+                    "header" => $this->barcodes[$orderNumber]['header'][0] ,
+                    "list" => $this->barcodes[$orderNumber]['lines'] ,
+                    
+                ));  ?>
     <?php }         
     if (array_key_exists( $orderNumber,$this->picklist)) { ?>
         <div class="pdf" >

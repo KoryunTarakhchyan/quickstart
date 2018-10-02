@@ -32,17 +32,36 @@ class Atlas_Model_inform3Mapper{
             $query = sqlsrv_query($this->_dbLink, $select);
     }
 
-    public function saveProceed($id) {
-        
-        $select = "INSERT INTO RAAFAT.dbo.PRTORD values('".$id['orderNumber']."','KORYUN','".date('Ymd')."',null,null)";
-        $results        =   $this->query($select);
+    public function saveProceed($id)    {       
+        $select     = "SELECT UAORNO FROM RAAFAT.dbo.PRTORD WHERE UAORNO = '".$id['orderNumber']."'";
+        $results    = $this->fetch($select);
+        if (count($results)==0){
+            $select = "INSERT INTO RAAFAT.dbo.PRTORD values('".$id['orderNumber']."','KORYUN','".date('Ymd')."',null,null,null,null,TRUE)";        
+        } else {
+            $select = "UPDATE RAAFAT.dbo.PRTORD SET UAUSER  = 'KORYUN', UADATE = '".date('Ymd')."', UACHEK = 1 WHERE UAORNO = '".$id['orderNumber']."'";        
+        }
+        $results    = $this->query($select);
     }
 
-    public function updateProceedUser($id) {
+    public function updateProceedUser($id,$printType) 
+    {
+        $select     = "SELECT UAORNO FROM RAAFAT.dbo.PRTORD WHERE UAORNO = '".$id."'";        
+        $results    = $this->fetch($select);
+        if (count($results)==0){
+            $select = "INSERT INTO RAAFAT.dbo.PRTORD values('".$id."',null,null,'KORYUN','".date('Ymd')."',null,null,null)";  
+            $this->query($select);
+        }
+        $type='';
+        if($printType ==0){
+            $type = ', UARPRN=1';
+        } else  {
+            $type = ', UAPPRN=1';
+        }       
+        $select = "UPDATE RAAFAT.dbo.PRTORD SET UAUSR2 = 'KORYUN', UADAT2 = '".date('Ymd')."' ".$type."  WHERE UAORNO = '".$id."'";        
+        $result    =   $this->query($select);
         
-        $select = "UPDATE RAAFAT.dbo.PRTORD SET UAUSR2 = 'KORYUN', UADAT2 = '".date('Ymd')."'  WHERE UAORNO = '".$id."'";
-        $results        =   $this->query($select);
     } 
+ 
 
     public function buildMonthlySales($search){
         $select = '' ;
@@ -58,12 +77,12 @@ class Atlas_Model_inform3Mapper{
                  END AS Description,
                  SUM(UBIVQT) AS Units,
                  SUM(UBLNAM) AS Sales
-                FROM MVXJDTA.ODLINE
-                JOIN MVXJDTA.ODHEAD ON (
+                FROM RAAFAT.dbo.ODLINE
+                JOIN RAAFAT.dbo.ODHEAD ON (
                         UADLIX=UBDLIX
                         AND UBCONO=UACONO
                         AND UBDIVI=UADIVI )
-                JOIN MVXJDTA.MITMAS ON (
+                JOIN RAAFAT.dbo.MITMAS ON (
                         UBITNO=MMITNO
                         AND UBCONO=MMCONO )
                 WHERE
@@ -78,8 +97,8 @@ class Atlas_Model_inform3Mapper{
             OKSMCD AS Sales_Person,
             COUNT(UAEXIN) AS Invoice_Total,
            SUM(UANTAM) AS Net_Invoice
-           FROM MVXJDTA.ODHEAD
-           LEFT JOIN MVXJDTA.OCUSMA ON (
+           FROM RAAFAT.dbo.ODHEAD
+           LEFT JOIN RAAFAT.dbo.OCUSMA ON (
                    UACUNO=OKCUNO
                    AND UACONO=OKCONO )
            WHERE
@@ -123,21 +142,21 @@ class Atlas_Model_inform3Mapper{
             ,MPLINE.IBRORN As Ref_Number
             --,MPLINE.IBRORL
             --,MPLINE.IBRORC
-            FROM MVXJDTA.FGRECL 
-            LEFT JOIN  MVXJDTA.MPLINE 
+            FROM RAAFAT.dbo.FGRECL 
+            LEFT JOIN  RAAFAT.dbo.MPLINE 
             ON MPLINE.IBPUNO = FGRECL.F2PUNO
             AND MPLINE.IBITNO = FGRECL.F2ITNO
             AND MPLINE.IBCONO = FGRECL.F2CONO 
             AND MPLINE.IBPNLS = FGRECL.F2PNLS
             AND (IBPUST >= 50 AND IBPUST <= 85)
             AND (IBPUSL >= 20 AND IBPUSL <= 85)
-            LEFT JOIN MVXJDTA.MITTRA
+            LEFT JOIN RAAFAT.dbo.MITTRA
             ON MITTRA.MTCONO = FGRECL.F2CONO
             AND MPLINE.IBRORN = MITTRA.MTRIDN
             AND MITTRA.MTITNO = FGRECL.F2ITNO
             AND MITTRA.MTTRQT = FGRECL.F2RPQT
             AND MTTTID = 'WMP'
-            LEFT JOIN MVXJDTA.CIDMAS
+            LEFT JOIN RAAFAT.dbo.CIDMAS
             ON CIDMAS.IDCONO = FGRECL.F2CONO
             AND CIDMAS.IDSUNO = FGRECL.F2SUNO
             WHERE F2CONO = 780
@@ -171,11 +190,14 @@ class Atlas_Model_inform3Mapper{
     public function buildReleasedOrders($search, $stage, $page =0){
         $cond = '';
         if($stage == 1){
-            $cond  .=" AND UAORNO IS NULL ";
+            $cond  .=" AND UACHEK  IS NULL ";
         }else if($stage == 0){
-            $cond  .=" AND UAORNO IS NOT NULL ";
+            $cond  .=" AND UACHEK = 1 ";
         }
         if ($search != null){
+            if($search['order_number']!= null){
+                $cond  .=" AND OAORNO = '".strtoupper ($search['order_number'])."'";
+            }
             if($search['customer_number']!= null){
                 $cond  .=" AND OKCUNO = '".strtoupper ($search['customer_number'])."'";
             }
@@ -191,11 +213,12 @@ class Atlas_Model_inform3Mapper{
             if($search['Order_date']!= null){
                 $cond  .=" AND OARLDT <= ".date('Ymd', strtotime($search['Order_date']));
             }
+            $page =0;
         }
         $limit = '';
-        if ($page != 0) {
+//        if ($page != 0) {
             $limit = "OFFSET ".($page*20)." ROWS  FETCH NEXT 20 ROWS ONLY";
-        }
+//        }
         
         $select = "
             SELECT
@@ -234,7 +257,10 @@ class Atlas_Model_inform3Mapper{
                 AND OAORSL = OAORST
                 $cond 
             ORDER BY OARLDT ASC ".$limit;
-         
+
+    //         print_r('<pre>')  ;
+    //         print_r($select)  ;
+    //         exit;
         $results        =   $this->fetch($select);
         return $results  ;
     }
@@ -266,11 +292,11 @@ class Atlas_Model_inform3Mapper{
                 b.OKTOWN AS sold_CustTown,
                 b.OKECAR AS sold_CustState
             FROM
-                MVXJDTA.OOHEAD
-                JOIN MVXJDTA.OCUSMA a ON (
+                RAAFAT.dbo.OOHEAD
+                JOIN RAAFAT.dbo.OCUSMA a ON (
                     OACUNO = a.OKCUNO
                     AND a.OKCONO = 780)
-                LEFT JOIN MVXJDTA.OCUSMA b ON (
+                LEFT JOIN RAAFAT.dbo.OCUSMA b ON (
                     OAPYNO = b.OKCUNO
                     AND b.OKCONO = 780)
             WHERE
@@ -304,7 +330,7 @@ class Atlas_Model_inform3Mapper{
                  (SELECT
                     TOP 1 SUM (CAST(OBORQT AS FLOAT))
                 FROM
-                    MVXJDTA.OOLINE
+                    RAAFAT.dbo.OOLINE
                 WHERE
                     OBCONO = 780
                 AND OBDIVI = 'BBB'
@@ -321,16 +347,16 @@ class Atlas_Model_inform3Mapper{
                     ELSE '0'
                 END AS exp_date                 
             FROM
-                MVXJDTA.MITALO
-                LEFT JOIN MVXJDTA.MITPOP ON (
+                RAAFAT.dbo.MITALO
+                LEFT JOIN RAAFAT.dbo.MITPOP ON (
                     MQCONO = MPCONO
                     AND MQITNO = MPITNO
                     AND MPALWQ = 'UPC')
-                LEFT JOIN MVXJDTA.MILOMA ON (
+                LEFT JOIN RAAFAT.dbo.MILOMA ON (
                     LMCONO = 780
                     AND LMITNO = MQITNO
                     AND LMBANO = MQBANO)
-                LEFT JOIN MVXJDTA.MITMAS ON (MMCONO = 780 AND MMITNO = MQITNO)
+                LEFT JOIN RAAFAT.dbo.MITMAS ON (MMCONO = 780 AND MMITNO = MQITNO)
             WHERE
                 MQCONO = 780
                 AND MQTTYP = 31
@@ -444,7 +470,7 @@ class Atlas_Model_inform3Mapper{
                            WHEN DATEDIFF (day,GETDATE(),convert(date, CONVERT(varchar(10),IBRCDT,101))) >= -21 THEN 'Within_QC_window'
                            ELSE 'Outside_QC_window' 
                            END AS STATUS
-                    FROM MVXJDTA.MPLINE
+                    FROM RAAFAT.dbo.MPLINE
                     WHERE IBCONO = 780
                     AND IBFACI = 'B01'
                     AND (IBPUSL >= 50 AND IBPUSL <= 70)

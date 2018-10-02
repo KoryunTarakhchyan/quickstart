@@ -79,33 +79,54 @@ class TicketController extends Zend_Controller_Action
             $data['orderNumbers'][] = $request->getParam('id',null);
         }
         $printType = $request->getParam('print',null);  
+        
+        // collecting all orderNumbers in one array
+        if (count($data['onPicklist'])>0 && count($data['onBarcode'])>0) { 
+            $allNumbers = array_unique(array_merge($data['onPicklist'],$data['onBarcode']));
+        } else if (count($data['onPicklist'])>0) {
+            $allNumbers  = $data['onPicklist'];        
+        } else if (count($data['onBarcode'])>0) {
+            $allNumbers  = $data['onBarcode'];
+        }
+       
+        //generating barcodes for all orderNumbers
+        foreach ($allNumbers as $orderNumber) {       
+            $options = array('barHeight' => 70,  'barThinWidth' => 3, 'text' => $orderNumber, 'drawText' => FALSE, 'imageType' => 'jpeg');
+            $barcode = new Zend_Barcode_Object_Code128();
+            $barcode->setOptions($options);
+            $barcodeOBj = Zend_Barcode::factory($barcode);
+            $imageResource = $barcodeOBj->draw();
+            imagejpeg($imageResource , 'pdf\barcode_'.$orderNumber.'.png');  
+            
+            $header [$orderNumber] = $inform3Mapper->buildPicklistheader($orderNumber);
+            $list   [$orderNumber] = $inform3Mapper->buildPicklist($orderNumber);
+        } 
+        //generating the picklist
         if (count($data['onPicklist'])>0) {
             foreach ($data['onPicklist'] as $orderNumber){
-                if ($printType == 1) {
-                    $inform3Mapper->updateProceedUser($orderNumber);
-                }
-                $options = array('barHeight' => 70,  'barThinWidth' => 3, 'text' => $orderNumber, 'drawText' => FALSE, 'imageType' => 'jpeg');
-                $barcode = new Zend_Barcode_Object_Code128();
-                $barcode->setOptions($options);
-                $barcodeOBj = Zend_Barcode::factory($barcode);
-                $imageResource = $barcodeOBj->draw();
-                imagejpeg($imageResource , 'pdf\barcode_'.$orderNumber.'.png');  
+                //update who had printed out the picklist 
+                $inform3Mapper->updateProceedUser($orderNumber,$printType);                       
 
-                $picklist [$orderNumber]['header']  = $inform3Mapper->buildPicklistheader($orderNumber);
-                $picklist [$orderNumber]['lines']       = $inform3Mapper->buildPicklist($orderNumber);
+                $picklist [$orderNumber]['header']  = $header [$orderNumber];
+                $picklist [$orderNumber]['lines']   = $list   [$orderNumber];
                 if (!in_array($orderNumber, $orderNumbers )) {
                     $orderNumbers[] = $orderNumber;
                 }            
             }
         }
+        
+        //generating separate barcode
         if (count($data['onBarcode'])>0) {
-            foreach ($data['onBarcode'] as $orderNumber){
+            foreach ($data['onBarcode'] as $orderNumber){                
                 $barcodes [] =$orderNumber;
+                $barcodes [$orderNumber]['header']  = $header [$orderNumber];
+                $barcodes [$orderNumber]['lines']   = $list   [$orderNumber];
                 if (!in_array($orderNumber, $orderNumbers )) {
                     $orderNumbers[] = $orderNumber;
                 } 
             }
         }        
+       
         
         $mapper->addCSSFile(Zend_Registry::get("root_path") . "/public/css/global.css");
         $mapper->addContent(
