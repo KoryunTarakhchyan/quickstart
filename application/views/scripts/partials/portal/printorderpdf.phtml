@@ -1,12 +1,12 @@
 <?php if(is_array($this->records) && count($this->records) > 0) {
     $pos    = array_unique(array_column($this->records, 'PO_Number'));
     foreach($pos as $po){
-        $data = array_filter($this->records, function ($var) use ($po) { return ($var['PO_Number'] == $po); });
+        $data = array_filter($this->records, function ($var) use ($po) { return ($var['PO_Number'] === $po); });
         $i=0;
         foreach($data as $record){  $i++;
             if($i==1){?>
                 
-            <div style=" height: 100%; width: 100%">
+            <div class="" >
                 <table  class='picking' style='margin: 0 auto; width:100%;' >
                         <tr>
                           <th colspan="2" class="table-header">PO Number</th>
@@ -25,7 +25,6 @@
                           <th colspan="2" class="table-header"><?php echo $record['Buyer']; ?></th>
                         </tr>                
                         <tr>
-                            <th class="table-header"></th>
                             <th class="table-header">Item No.</th>
                             <th class="table-header">Item Name</th>
                             <th class="table-header">Received Qty</th>
@@ -42,7 +41,6 @@
                         </tr>
             <?php } ?>
                 <tr>
-                        <td class="table-line"></td>
                         <td class="table-line"><?php echo $record['Item']; ?></td>
                         <td class="table-line"><?php echo $record['Descr']; ?></td>
                         <td class="table-line"><?php echo (float) $record['Reported_Qty']; ?></td>
@@ -60,6 +58,7 @@
 
             <?php }  ?>
                 </table>   
-            </div>      
+            </div>  
+            <div style='height: 100%; width: 100%'></div> 
 <?php } 
 } ?>

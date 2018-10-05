@@ -24,7 +24,7 @@
     $location =  array('0' => 'Robertson','1' => 'Shoemaker');
     $type =  array('0' => 'Desktop','1' => 'Laptop','2' => 'Server');
 ?> 
-<div class="form_options">[ <a href="<?php echo $this->url(array('controller' => 'ticket','action'=> 'inventory'),'default',true) ?>">Add New Item</a> ]</div>
+<div class="form_options">[ <a href="<?php echo $this->url(array('controller' => 'portal','action'=> 'inventory'),'default',true) ?>">Add New Item</a> ]</div>
 <table  class='user_table' width="1200" >
     <thead>               
         <tr>
@@ -52,7 +52,7 @@
             <td ><?php echo date('m/d/Y H:i', strtotime($entry['support_date'])); ?></td>
             <td ><?php echo $type[$entry['type']]; ?></td>
             <td >
-                <a href="/ticket/inventory/id/<?php echo $entry['id']; ?>">
+                <a href="/portal/inventory/id/<?php echo $entry['id']; ?>">
                     <img title="edit the selected user's information" src="/images/icons/famfam/pencil.png" />
                 </a>
             </td> 

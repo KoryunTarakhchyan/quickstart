@@ -32,11 +32,13 @@ class Atlas_Model_inform3Mapper{
             $query = sqlsrv_query($this->_dbLink, $select);
     }
 
-    public function saveProceed($id)    {       
+    public function saveProceed($id)    {     
+        
         $select     = "SELECT UAORNO FROM RAAFAT.dbo.PRTORD WHERE UAORNO = '".$id['orderNumber']."'";
         $results    = $this->fetch($select);
         if (count($results)==0){
-            $select = "INSERT INTO RAAFAT.dbo.PRTORD values('".$id['orderNumber']."','KORYUN','".date('Ymd')."',null,null,null,null,TRUE)";        
+            $select = "INSERT INTO RAAFAT.dbo.PRTORD values('".$id['orderNumber']."','KORYUN','".date('Ymd')."',null,null,null,null,1)"; 
+     
         } else {
             $select = "UPDATE RAAFAT.dbo.PRTORD SET UAUSER  = 'KORYUN', UADATE = '".date('Ymd')."', UACHEK = 1 WHERE UAORNO = '".$id['orderNumber']."'";        
         }
@@ -77,12 +79,12 @@ class Atlas_Model_inform3Mapper{
                  END AS Description,
                  SUM(UBIVQT) AS Units,
                  SUM(UBLNAM) AS Sales
-                FROM RAAFAT.dbo.ODLINE
-                JOIN RAAFAT.dbo.ODHEAD ON (
+                FROM MVXJDTA.ODLINE
+                JOIN MVXJDTA.ODHEAD ON (
                         UADLIX=UBDLIX
                         AND UBCONO=UACONO
                         AND UBDIVI=UADIVI )
-                JOIN RAAFAT.dbo.MITMAS ON (
+                JOIN MVXJDTA.MITMAS ON (
                         UBITNO=MMITNO
                         AND UBCONO=MMCONO )
                 WHERE
@@ -97,8 +99,8 @@ class Atlas_Model_inform3Mapper{
             OKSMCD AS Sales_Person,
             COUNT(UAEXIN) AS Invoice_Total,
            SUM(UANTAM) AS Net_Invoice
-           FROM RAAFAT.dbo.ODHEAD
-           LEFT JOIN RAAFAT.dbo.OCUSMA ON (
+           FROM MVXJDTA.ODHEAD
+           LEFT JOIN MVXJDTA.OCUSMA ON (
                    UACUNO=OKCUNO
                    AND UACONO=OKCONO )
            WHERE
@@ -142,21 +144,21 @@ class Atlas_Model_inform3Mapper{
             ,MPLINE.IBRORN As Ref_Number
             --,MPLINE.IBRORL
             --,MPLINE.IBRORC
-            FROM RAAFAT.dbo.FGRECL 
-            LEFT JOIN  RAAFAT.dbo.MPLINE 
+            FROM MVXJDTA.FGRECL 
+            LEFT JOIN  MVXJDTA.MPLINE 
             ON MPLINE.IBPUNO = FGRECL.F2PUNO
             AND MPLINE.IBITNO = FGRECL.F2ITNO
             AND MPLINE.IBCONO = FGRECL.F2CONO 
             AND MPLINE.IBPNLS = FGRECL.F2PNLS
             AND (IBPUST >= 50 AND IBPUST <= 85)
             AND (IBPUSL >= 20 AND IBPUSL <= 85)
-            LEFT JOIN RAAFAT.dbo.MITTRA
+            LEFT JOIN MVXJDTA.MITTRA
             ON MITTRA.MTCONO = FGRECL.F2CONO
             AND MPLINE.IBRORN = MITTRA.MTRIDN
             AND MITTRA.MTITNO = FGRECL.F2ITNO
             AND MITTRA.MTTRQT = FGRECL.F2RPQT
             AND MTTTID = 'WMP'
-            LEFT JOIN RAAFAT.dbo.CIDMAS
+            LEFT JOIN MVXJDTA.CIDMAS
             ON CIDMAS.IDCONO = FGRECL.F2CONO
             AND CIDMAS.IDSUNO = FGRECL.F2SUNO
             WHERE F2CONO = 780
@@ -176,7 +178,7 @@ class Atlas_Model_inform3Mapper{
         $select = "SELECT
                     COUNT (OAORNO) AS rowscount
                     FROM
-                    RAAFAT.dbo.OOHEAD
+                    MVXJDTA.OOHEAD
                     WHERE
                     OACONO = 780
                     AND OADIVI = 'BBB'
@@ -187,6 +189,7 @@ class Atlas_Model_inform3Mapper{
         return $results[0]['rowscount']  ;
                 
     }
+    
     public function buildReleasedOrders($search, $stage, $page =0){
         $cond = '';
         if($stage == 1){
@@ -215,10 +218,7 @@ class Atlas_Model_inform3Mapper{
             }
             $page =0;
         }
-        $limit = '';
-//        if ($page != 0) {
-            $limit = "OFFSET ".($page*20)." ROWS  FETCH NEXT 20 ROWS ONLY";
-//        }
+        $limit = "OFFSET ".($page*20)." ROWS  FETCH NEXT 20 ROWS ONLY";
         
         $select = "
             SELECT
@@ -236,19 +236,21 @@ class Atlas_Model_inform3Mapper{
                 OARESP AS CSA,
                 OKECAR AS State,
                 OKPONO AS Zip,
-                (SELECT count(*) FROM RAAFAT.dbo.OOLINE ol WHERE ol.OBORNO = head.OAORNO AND ol.OBCONO=780 AND ol.OBDIVI='BBB') AS No_Items,
-                CAST((SELECT SUM(ol.OBORQT) FROM RAAFAT.dbo.OOLINE ol WHERE ol.OBORNO = head.OAORNO AND ol.OBCONO=780 AND ol.OBDIVI='BBB') AS FLOAT) AS Total_Qty,
+                UARPRN ,
+                UAPPRN ,
+                (SELECT count(*) FROM MVXJDTA.OOLINE ol WHERE ol.OBORNO = head.OAORNO AND ol.OBCONO=780 AND ol.OBDIVI='BBB') AS No_Items,
+                CAST((SELECT SUM(ol.OBORQT) FROM MVXJDTA.OOLINE ol WHERE ol.OBORNO = head.OAORNO AND ol.OBCONO=780 AND ol.OBDIVI='BBB') AS FLOAT) AS Total_Qty,
                 (              SELECT MAX(CASE WHEN MMITCL = 'PROBT' THEN 1  ELSE 0 END)
-                                FROM RAAFAT.dbo.OOLINE ol2
-                                JOIN RAAFAT.dbo.MITMAS ON ( ol2.OBITNO = MMITNO AND  MMCONO=780)
+                                FROM MVXJDTA.OOLINE ol2
+                                JOIN MVXJDTA.MITMAS ON ( ol2.OBITNO = MMITNO AND  MMCONO=780)
                                 WHERE ol2.OBORNO=head.OAORNO AND ol2.OBCONO=780 AND ol2.OBDIVI='BBB'
                 ) AS Has_Probo,
                 OKMODL AS Customer_Ship,
                 OKTEDL AS Customer_Cat,
                 OKTEPY AS Customer_Pay
             FROM
-                    RAAFAT.dbo.OOHEAD head
-            JOIN RAAFAT.dbo.OCUSMA ON ( OACUNO = OKCUNO AND OACONO = OKCONO )
+                    MVXJDTA.OOHEAD head
+            JOIN MVXJDTA.OCUSMA ON ( OACUNO = OKCUNO AND OACONO = OKCONO )
             LEFT JOIN RAAFAT.dbo.PRTORD ord ON (OAORNO = UAORNO)
             WHERE
                 OACONO = 780
@@ -257,10 +259,7 @@ class Atlas_Model_inform3Mapper{
                 AND OAORSL = OAORST
                 $cond 
             ORDER BY OARLDT ASC ".$limit;
-
-    //         print_r('<pre>')  ;
-    //         print_r($select)  ;
-    //         exit;
+        
         $results        =   $this->fetch($select);
         return $results  ;
     }
@@ -292,11 +291,11 @@ class Atlas_Model_inform3Mapper{
                 b.OKTOWN AS sold_CustTown,
                 b.OKECAR AS sold_CustState
             FROM
-                RAAFAT.dbo.OOHEAD
-                JOIN RAAFAT.dbo.OCUSMA a ON (
+                MVXJDTA.OOHEAD
+                JOIN MVXJDTA.OCUSMA a ON (
                     OACUNO = a.OKCUNO
                     AND a.OKCONO = 780)
-                LEFT JOIN RAAFAT.dbo.OCUSMA b ON (
+                LEFT JOIN MVXJDTA.OCUSMA b ON (
                     OAPYNO = b.OKCUNO
                     AND b.OKCONO = 780)
             WHERE
@@ -306,7 +305,7 @@ class Atlas_Model_inform3Mapper{
                 AND OAORSL >= 44
                 AND OAORNO = '".$orderNumber."'
             ORDER BY OAORNO DESC ";
-        
+
         $results        =   $this->fetch($select);
         return $results  ;
     }
@@ -330,7 +329,7 @@ class Atlas_Model_inform3Mapper{
                  (SELECT
                     TOP 1 SUM (CAST(OBORQT AS FLOAT))
                 FROM
-                    RAAFAT.dbo.OOLINE
+                    MVXJDTA.OOLINE
                 WHERE
                     OBCONO = 780
                 AND OBDIVI = 'BBB'
@@ -347,16 +346,16 @@ class Atlas_Model_inform3Mapper{
                     ELSE '0'
                 END AS exp_date                 
             FROM
-                RAAFAT.dbo.MITALO
-                LEFT JOIN RAAFAT.dbo.MITPOP ON (
+                MVXJDTA.MITALO
+                LEFT JOIN MVXJDTA.MITPOP ON (
                     MQCONO = MPCONO
                     AND MQITNO = MPITNO
                     AND MPALWQ = 'UPC')
-                LEFT JOIN RAAFAT.dbo.MILOMA ON (
+                LEFT JOIN MVXJDTA.MILOMA ON (
                     LMCONO = 780
                     AND LMITNO = MQITNO
                     AND LMBANO = MQBANO)
-                LEFT JOIN RAAFAT.dbo.MITMAS ON (MMCONO = 780 AND MMITNO = MQITNO)
+                LEFT JOIN MVXJDTA.MITMAS ON (MMCONO = 780 AND MMITNO = MQITNO)
             WHERE
                 MQCONO = 780
                 AND MQTTYP = 31
@@ -470,7 +469,7 @@ class Atlas_Model_inform3Mapper{
                            WHEN DATEDIFF (day,GETDATE(),convert(date, CONVERT(varchar(10),IBRCDT,101))) >= -21 THEN 'Within_QC_window'
                            ELSE 'Outside_QC_window' 
                            END AS STATUS
-                    FROM RAAFAT.dbo.MPLINE
+                    FROM MVXJDTA.MPLINE
                     WHERE IBCONO = 780
                     AND IBFACI = 'B01'
                     AND (IBPUSL >= 50 AND IBPUSL <= 70)
@@ -482,6 +481,73 @@ class Atlas_Model_inform3Mapper{
         return $results  ;
 
     }
+    
+    public function lotShipmentReport($search) {
+        $lot    =   trim($search['lotNumber']);
+        $item   =   trim($search['itemkey']);
+        $select = "
+            SELECT
+                CustKey, Order_No,PO_No, Item_Key, Order_Qty, QTY_Issued, BinNo, LotNo, ExpDate, OrdDate
+            FROM
+                (
+                    SELECT
+                            OBCUNO AS CustKey,
+                            MTRIDN AS Order_No,
+                            OACUOR AS PO_No,
+                            MTITNO AS Item_Key,
+                            OBORQT AS Order_Qty,
+                            MTTRQT AS QTY_Issued,
+                            MTWHSL AS BinNo,
+                            MTBANO AS LotNo,
+                            LMEXPI AS ExpDate,
+                            OAORDT AS OrdDate
+                    FROM
+                            MVXJDTA.MITTRA
+                            JOIN MVXJDTA.OOHEAD ON ( OACONO = 780 AND OADIVI = 'BBB' AND OAORNO = MTRIDN )
+                            JOIN MVXJDTA.OOLINE ON ( OBCONO = 780 AND OBDIVI = 'BBB' AND OBORNO = MTRIDN AND OBITNO = MTITNO )
+                            JOIN MVXJDTA.MILOMA ON ( LMCONO = 780 AND LMITNO = MTITNO AND LMBANO = MTBANO )
+                    WHERE
+                            MTCONO = 780
+                            AND MTTTYP = 31
+                            AND MTWHLO = 'JFI'
+                            
+                            AND OACUOR != ''
+                            AND MTBANO = '$lot' 
+                            AND MTITNO = '$item'
+                UNION
+                    SELECT
+                            OBCUNO AS CustKey,
+                            MQRIDN AS Order_No,
+                            OACUOR AS PO_No,
+                            MQITNO AS Item_Key,
+                            OBORQT AS Order_Qty,
+                            MQALQT AS QTY_Issued,
+                            MQWHSL AS BinNo,
+                            MQBANO AS LotNo,
+                            LMEXPI AS ExpDate,
+                            OAORDT AS OrdDate
+                    FROM
+                            MVXJDTA.MITALO
+                    JOIN MVXJDTA.OOHEAD ON ( OACONO = 780 AND OADIVI = 'BBB' AND OAORNO = MQRIDN )
+                    JOIN MVXJDTA.OOLINE ON ( OBCONO = 780 AND OBDIVI = 'BBB' AND OBORNO = MQRIDN AND OBITNO = MQITNO )
+                    JOIN MVXJDTA.MILOMA ON ( LMCONO = 780 AND LMITNO = MQITNO AND LMBANO = MQBANO )
+                    WHERE
+                            MQCONO = 780
+                            AND MQTTYP = 31
+                            AND MQWHLO = 'JFI'
+                           
+                            AND OACUOR != ''
+                            AND MQBANO = '$lot'
+                            AND MQITNO = '$item'
+                ) results
+                GROUP BY
+                    CustKey, Order_No, PO_No, Item_Key, Order_Qty, QTY_Issued, BinNo, LotNo, ExpDate, OrdDate
+                ORDER BY
+                    PO_No ASC";
+        $results        =   $this->fetch($select);
+        return $results  ;
+    }
+
 }
 
 

@@ -11,7 +11,7 @@
     $sumitem =0;
     ?>
     <?php if (in_array($orderNumber,$this->barcodes)){ 
-         echo $this->partial('\partials\ticket\printbarcode.phtml', array(
+         echo $this->partial('/partials/portal/printbarcode.phtml', array(
                     "orderNumber" => $orderNumber, 
                     "header" => $this->barcodes[$orderNumber]['header'][0] ,
                     "list" => $this->barcodes[$orderNumber]['lines'] ,
@@ -20,7 +20,7 @@
     <?php }         
     if (array_key_exists( $orderNumber,$this->picklist)) { ?>
         <div class="pdf" >
-            <?php echo $this->partial('\partials\ticket\picklistheader.phtml', array(
+            <?php echo $this->partial('/partials/portal/picklistheader.phtml', array(
                     "orderNumber" => $orderNumber, 
                     "picklist" => $this->picklist ,
                     "top" => 1,

@@ -72,17 +72,19 @@ class Atlas_Model_ShipmentsheaderMapper
         return $entries;
     }#end fetchAll() function
 
-    public function buildShipments($itemKey) {        
-       
+        public function buildShipments($itemKey,$batchnumbers) { 
+        
         $select = $this->getDbTable()->select();
         $select->setIntegrityCheck(false)
-                ->from(array("header" => "shipmentsheader"), array("*"))
-                ->joinInner(array('item' => 'shipmentsitems'), 'item.orderId = header.orderId');
+                ->from(array("header" => "shipments_header"), array("*"))
+                ->joinInner(array('item' => 'shipments_items'), 'item.orderId = header.orderId');
         if ($itemKey != null) {
-            $select->where("item.sku = '".$itemKey."'");
+            $select->where("(item.sku = '$itemKey' OR item.sku like '$itemKey-%' OR item.sku like '$itemKey-%')" );
+            $select->where("batchNumber IN (?)",$batchnumbers);
         }
         return $select->query()->fetchAll();
-    }#end 
+    }#end
+
     
     
 }

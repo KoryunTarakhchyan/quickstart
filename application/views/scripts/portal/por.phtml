@@ -1,17 +1,11 @@
-<script>
-  $( function() {
-    $( "#receipt_date" ).datepicker();
-  } );
-</script>
-
 <form action="" method="post">
-    <table id="form" style="margin:0 auto;">
+    <table id="form" autocomplete="off" style="margin:0 auto;">
         <tr>
             <td colspan=2 class="top-header">Purchase Order Receipt Report</td>
         </tr>        
         <tr>
             <td class="form-element">Receipt date</td>
-            <td class="form-element"><input type="text" name="receipt_date" value="<?php echo $this->entries['receipt_date']; ?>" id="receipt_date" required="required"/></td>
+            <td class="form-element"><input type="text" autocomplete="off" name="receipt_date" value="<?php echo $this->entries['receipt_date']; ?>" id="receipt_date" required="required"/></td>
         </tr>        
         <tr>
             <td class="form-element">Export to PDF</td>

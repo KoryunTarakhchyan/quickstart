@@ -2,7 +2,7 @@
 class Atlas_Model_DbTable_Shipmentsheader extends Zend_Db_Table_Abstract
 {
 
-    protected $_name = 'shipmentsheader';
+    protected $_name = 'shipments_header';
     protected $_id   = 'id';
 
     protected function _setupDatabaseAdapter()

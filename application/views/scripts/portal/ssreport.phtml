@@ -1,0 +1,105 @@
+
+<!-- BREAD CRUMB NAVIGATOR PANEL -->
+<div class="bread_crumb_module">
+    <div class="bread_crumb">
+        <ul>
+            <li><a href="http://<?php echo $this->servers[$this->cur_server]; ?>/dashboard">Home</a></li>
+            <li><?php echo $this->title; ?></li>
+        </ul>
+    </div><!-- end bread_crumb div -->
+</div><!-- end bread_crumb_module div -->
+<div class="clear"></div>
+
+<!-- SYSTEM MESSAGES -->
+<?php if( is_array($this->messages) && count($this->messages) > 0 ) { ?>
+    <div id="messages">
+        <ul>
+            <?php foreach( $this->messages as $message ) { ?>
+                <li><?php echo $message; ?></li>
+            <?php } ?>
+        </ul>
+    </div><!-- end messages div -->
+<?php } ?>
+
+<form action="" method="post">
+    <table id="form" style="margin:0 auto;">
+        <tr>
+            <td colspan=2 class="top-header"><?php echo $this->title; ?></td>
+        </tr>
+        <tr>
+            <td class="form-element">Item Key</td>
+            <td class="form-element"><input type="text" name="itemkey" value="<?php echo $this->entries['itemkey']; ?>" id="itemkey"  required="required"/></td>
+        </tr>   
+        <tr>
+            <td class="form-element">Lot Number</td>
+            <td class="form-element"><input type="text" name="lotNumber" value="<?php echo $this->entries['lotNumber']; ?>" id="lotNumber"  required="required"/></td>
+        </tr>   
+<!--        <tr>
+            <td class="form-element">Start date</td>
+            <td class="form-element"><input type="text" autocomplete="off" name="start_date" value="<?php echo $this->entries['start_date']; ?>" id="start_date"/></td>
+        </tr>        
+        <tr>
+            <td class="form-element">End date</td>
+            <td class="form-element"><input type="text" autocomplete="off" name="end_date" value="<?php echo $this->entries['end_date']; ?>" id="end_date"/></td>
+        </tr>-->
+        <tr>
+            <td colspan='2' class="form-element" style="text-align: center;">
+                <input type="submit" name="submit" id="submit" value="Search">
+            </td>
+        </tr>
+    </table>
+</form>
+<?php if(is_array($this->records) && count($this->records) > 0) { ?>
+    <table class="report_table" >
+        <thead>
+            <tr>
+                <th style="width:20px;" class="table-header">#</th>
+                <th class="table-header">CO No</th>
+                <th class="table-header">PO No</th>
+                <th class="table-header">Order Id</th>
+                <th class="table-header">SKU</th>
+                <th class="table-header">QTY</th>
+<!--                <th class="table-header">Shipment Id</th>-->
+<!--                <th class="table-header">Customer Email</th>-->
+                <th class="table-header">Name</th>
+<!--                <th class="table-header">Company</th>-->
+                <th class="table-header">Street1</th>
+<!--                <th class="table-header">Street2</th>-->
+<!--                <th class="table-header">Street3</th>-->
+                <th class="table-header">City</th>
+                <th class="table-header">State</th>
+                <th class="table-header">Postal Code</th>
+                <th class="table-header">Country</th>
+                <th class="table-header">Phone</th>
+                <th class="table-header">Ship Date</th>
+<!--                <th class="table-header">Store ID</th>-->
+            </tr>
+        </thead>
+        <tbody style="display:table-footer-group">
+             <?php $i=0; foreach ($this->records as $entry) { $i++;?>
+                 <tr>
+                      <td  style="width:20px;" class="table-line"><?php echo $i;?></td>
+                      <td class="table-line"><?php echo  array_search ($entry['batchNumber'], $this->batchnumbers); ?></td>
+                      <td class="table-line"><?php echo $entry['batchNumber']; ?></td>
+                      <td class="table-line"><?php echo $entry['orderId']; ?></td>
+                      <td class="table-line"><?php echo $entry['sku']; ?></td>
+                      <td class="table-line"><?php echo $entry['quantity']; ?></td>
+<!--                      <td class="table-line"><?php echo $entry['shipmentId']; ?></td>-->
+<!--                      <td class="table-line"><?php echo $entry['customerEmail']; ?></td>-->
+                      <td class="table-line"><?php echo $entry['shipTo_name']; ?></td>
+<!--                      <td class="table-line"><?php echo $entry['shipTo_company']; ?></td>-->
+                      <td class="table-line"><?php echo $entry['shipTo_street1']; ?></td>
+<!--                      <td class="table-line"><?php echo $entry['shipTo_street2']; ?></td>-->
+<!--                      <td class="table-line"><?php echo $entry['shipTo_street3']; ?></td>-->
+                      <td class="table-line"><?php echo $entry['shipTo_city']; ?></td>
+                      <td class="table-line"><?php echo $entry['shipTo_state']; ?></td>
+                      <td class="table-line"><?php echo $entry['shipTo_postalCode']; ?></td>
+                      <td class="table-line"><?php echo $entry['shipTo_country']; ?></td>
+                      <td class="table-line"><?php echo $entry['shipTo_phone']; ?></td>
+                      <td class="table-line"><?php echo date('m-d-Y',strtotime($entry['shipDate'])); ?></td>
+<!--                      <td class="table-line"><?php echo $entry['storeId']; ?></td>-->
+                 </tr>
+             <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>

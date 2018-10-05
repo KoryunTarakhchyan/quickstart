@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="/js/global.js"></script>
 </head>
 <body>
 <div id="header" style="background-color: #EEEEEE; height: 60px;">
@@ -15,63 +16,63 @@
         <ul class="menu">
             <li>
                 <a href="<?php echo $this->url(
-                    array('controller'=>'ticket',
+                    array('controller'=>'portal',
                           'action'=>'tickets'),
                     'default',
                     true) ?>">Ticket</a>
             </li>
             <li>
                  <a href="<?php echo $this->url(
-                    array('controller'=>'ticket',
+                    array('controller'=>'portal',
                           'action'=>'inventories'),
                     'default',
                     true) ?>">Inventory</a>
             </li>
             <li>
                 <a href="<?php echo $this->url(
-                    array('controller'=>'ticket',
+                    array('controller'=>'portal',
                           'action'=>'pickorders'),
                     'default',
                     true) ?>">Orders</a>
             </li>
             <li>
                  <a href="<?php echo $this->url(
-                    array('controller'=>'ticket',
+                    array('controller'=>'portal',
                           'action'=>'releasedorders'),
                     'default',
                     true) ?>">Release Orders</a>
             </li>
             <li>
                  <a href="<?php echo $this->url(
-                    array('controller'=>'ticket',
+                    array('controller'=>'portal',
                           'action'=>'pbon'),
                     'default',
                     true) ?>">Picklist by order number</a>
             </li>
             <li>
                  <a href="<?php echo $this->url(
-                array('controller'=>'ticket',
+                array('controller'=>'portal',
                       'action'=>'report'),
                 'default',
                 true) ?>">Report</a>
             </li>
             <li>
                <a href="<?php echo $this->url(
-                array('controller'=>'ticket',
+                array('controller'=>'portal',
                       'action'=>'por'),
                 'default',
                 true) ?>">Purchase Order Receipt </a>
             </li>
             <li>
                <a href="<?php echo $this->url(
-                array('controller'=>'ticket',
-                      'action'=>'shipment'),
+                array('controller'=>'portal',
+                      'action'=>'ssreport'),
                 'default',
                 true) ?>">Shipment </a>
             </li>
             <li>
                <a href="<?php echo $this->url(
-                array('controller'=>'ticket',
+                array('controller'=>'portal',
                       'action'=>'aging'),
                 'default',
                 true) ?>">Aging Report </a>

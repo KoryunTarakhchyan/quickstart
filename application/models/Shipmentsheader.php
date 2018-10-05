@@ -29,6 +29,7 @@ class Atlas_Model_Shipmentsheader
     protected $_notifyErrorMessage;
     protected $_shipTo_name;
     protected $_shipTo_company;
+    protected $_shipTo_street1;
     protected $_shipTo_street2;
     protected $_shipTo_street3;
     protected $_shipTo_city;
@@ -93,7 +94,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setId($id)
     {
-        $this->_id = (int) $id;
+        $this->_id =  $id;
         return $this;
     }
  
@@ -104,7 +105,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipmentId($id)
     {
-        $this->_shipmentId = (int) $id;
+        $this->_shipmentId =  $id;
         return $this;
     }
  
@@ -115,7 +116,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setOrderId($id)
     {
-        $this->_orderId = (int) $id;
+        $this->_orderId =  $id;
         return $this;
     }
  
@@ -126,7 +127,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setOrderKey($id)
     {
-        $this->_orderKey = (int) $id;
+        $this->_orderKey =  $id;
         return $this;
     }
  
@@ -137,7 +138,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setUserId($text)
     {
-        $this->_userId = (string) $text;
+        $this->_userId =  $text;
         return $this;
     }
  
@@ -148,7 +149,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setCustomerEmail($text)
     {
-        $this->_customerEmail = (string) $text;
+        $this->_customerEmail =  $text;
         return $this;
     }
  
@@ -159,7 +160,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setOrderNumber($text)
     {
-        $this->_orderNumber = (string) $text;
+        $this->_orderNumber =  $text;
         return $this;
     }
  
@@ -203,7 +204,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setTrackingNumber($text)
     {
-        $this->_trackingNumber = (string) $text;
+        $this->_trackingNumber =  $text;
         return $this;
     }
  
@@ -214,7 +215,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setIsReturnLabel($text)
     {
-        $this->_isReturnLabel = (string) $text;
+        $this->_isReturnLabel =  $text;
         return $this;
     }
  
@@ -225,7 +226,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setBatchNumber($number)
     {
-        $this->_batchNumber = (int) $number;
+        $this->_batchNumber =  $number;
         return $this;
     }
  
@@ -237,7 +238,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setCarrierCode($text)
     {
-        $this->_carrierCode = (string) $text;
+        $this->_carrierCode =  $text;
         return $this;
     }
  
@@ -249,7 +250,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setServiceCode($text)
     {
-        $this->_serviceCode = (string) $text;
+        $this->_serviceCode =  $text;
         return $this;
     }
  
@@ -261,7 +262,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setPackageCode($text)
     {
-        $this->_packageCode = (string) $text;
+        $this->_packageCode =  $text;
         return $this;
     }
  
@@ -273,7 +274,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setConfirmation($text)
     {
-        $this->_confirmation = (string) $text;
+        $this->_confirmation =  $text;
         return $this;
     }
  
@@ -285,7 +286,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setWarehouseId($id)
     {
-        $this->_warehouseId = (int) $id;
+        $this->_warehouseId =  $id;
         return $this;
     }
  
@@ -297,7 +298,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setVoided($text)
     {
-        $this->_voided = (string) $text;
+        $this->_voided =  $text;
         return $this;
     }
  
@@ -321,7 +322,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setMarketplaceNotified($number)
     {
-        $this->_marketplaceNotified = (int) $number;
+        $this->_marketplaceNotified =  $number;
         return $this;
     }
  
@@ -333,7 +334,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setNotifyErrorMessage($text)
     {
-        $this->_notifyErrorMessage = (string) $text;
+        $this->_notifyErrorMessage =  $text;
         return $this;
     }
  
@@ -345,7 +346,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_name($text)
     {
-        $this->_shipTo_name = (string) $text;
+        $this->_shipTo_name =  $text;
         return $this;
     }
  
@@ -357,7 +358,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_company($text)
     {
-        $this->_shipTo_company = (string) $text;
+        $this->_shipTo_company =  $text;
         return $this;
     }
  
@@ -369,7 +370,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_street1($text)
     {
-        $this->_shipTo_street1 = (string) $text;
+        $this->_shipTo_street1 =  $text;
         return $this;
     }
  
@@ -381,7 +382,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_street2($text)
     {
-        $this->_shipTo_street2 = (string) $text;
+        $this->_shipTo_street2 =  $text;
         return $this;
     }
  
@@ -393,7 +394,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_street3($text)
     {
-        $this->_shipTo_street3 = (string) $text;
+        $this->_shipTo_street3 =  $text;
         return $this;
     }
  
@@ -405,7 +406,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_city($text)
     {
-        $this->_shipTo_city = (string) $text;
+        $this->_shipTo_city =  $text;
         return $this;
     }
  
@@ -417,7 +418,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_state($text)
     {
-        $this->_shipTo_state = (string) $text;
+        $this->_shipTo_state =  $text;
         return $this;
     }
  
@@ -429,7 +430,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_postalCode($text)
     {
-        $this->_shipTo_postalCode = (string) $text;
+        $this->_shipTo_postalCode =  $text;
         return $this;
     }
  
@@ -441,7 +442,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_country($text)
     {
-        $this->_shipTo_country = (string) $text;
+        $this->_shipTo_country =  $text;
         return $this;
     }
  
@@ -453,7 +454,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_phone($text)
     {
-        $this->_shipTo_phone = (string) $text;
+        $this->_shipTo_phone =  $text;
         return $this;
     }
  
@@ -465,7 +466,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_residential($text)
     {
-        $this->_shipTo_residential = (string) $text;
+        $this->_shipTo_residential =  $text;
         return $this;
     }
  
@@ -477,7 +478,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setShipTo_addressVerified($text)
     {
-        $this->_shipTo_addressVerified = (string) $text;
+        $this->_shipTo_addressVerified =  $text;
         return $this;
     }
  
@@ -489,7 +490,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setWeight_value($number)
     {
-        $this->_weight_value = (int) $number;
+        $this->_weight_value =  $number;
         return $this;
     }
  
@@ -501,7 +502,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setWeight_units($text)
     {
-        $this->_weight_units = (string) $text;
+        $this->_weight_units =  $text;
         return $this;
     }
  
@@ -513,7 +514,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setWeightUnits($number)
     {
-        $this->_weightUnits = (int) $number;
+        $this->_weightUnits =  $number;
         return $this;
     }
  
@@ -525,7 +526,7 @@ class Atlas_Model_Shipmentsheader
     
     public function setStoreId($number)
     {
-        $this->_storeId = (int) $number;
+        $this->_storeId =  $number;
         return $this;
     }
  
